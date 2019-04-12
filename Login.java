@@ -1,16 +1,33 @@
 package login;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.SocketException;
 
 public class Login extends JFrame {
+    //GUI
     private Image loginImage=new ImageIcon("login.jpg").getImage();//login background
     private JTextField accountField=new JTextField(15);
     private JTextField passwordField=new JTextField(15);
+    //socket
+    private Socket socket;
+    private String serverAddr="localhost";
+    private int serverPort=10086;
+    private PrintWriter pw;
     public Login(){
+        try{
+            socket=new Socket(serverAddr, serverPort);
+            pw=new PrintWriter(socket.getOutputStream());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         this.add(new JPanel(){
             protected void paintComponent(Graphics g){
                 g.drawImage(loginImage, 0, 0, this.getWidth(), this.getHeight(), this);//set login background
@@ -65,7 +82,30 @@ public class Login extends JFrame {
                                             public void actionPerformed(ActionEvent e) {
                                                 String account=accountField.getText();
                                                 String password=passwordField.getText();
-                                                System.out.println(account+" "+password);
+
+                                                pw.println(account+" "+password);
+                                                pw.flush();
+
+                                                //get line from Serer
+                                                InputStream in=null;
+                                                try{
+                                                    in=socket.getInputStream();
+                                                    BufferedReader bf=new BufferedReader(new InputStreamReader(in));
+                                                    String line;
+                                                    while((line=bf.readLine())!=null){
+                                                        System.out.println(line);
+                                                        if(line.equals("0"))
+                                                            break;
+                                                        if(line.equals("1")){
+                                                            Login.this.dispose();
+                                                            //run other GUI
+                                                            break;
+                                                        }
+                                                    }
+                                                }catch (SocketException se){
+                                                }catch (Exception e1){
+                                                    e1.printStackTrace();
+                                                }
                                             }
                                         });
                                     }
@@ -87,6 +127,7 @@ public class Login extends JFrame {
             super(s);
         }
     }*/
+    //Nonopaque panel
     public class NonopaquePanel extends JPanel{
         public NonopaquePanel(){
             super();
