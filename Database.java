@@ -13,11 +13,12 @@ public class Database {
 	private ResultSet rs;
 	public Database() {
 		Connectdb();
+		Createtable();
 	}
 	
 	public void Connectdb() {
 		String JDriver="com.mysql.cj.jdbc.Driver";
-		String DB_URL="jdbc:mysql://localhost:3306/bookbase;";
+		String DB_URL="jdbc:mysql://localhost:3306/bookbase";
 		try {
 			Class.forName(JDriver);
 		}catch(ClassNotFoundException e) {
@@ -63,7 +64,7 @@ public class Database {
 				+ "id varchar(10) not null,"
 				+ "pwd varchar(10) not null,"
 				+ "alreadyborrowednum int(10) not null,"
-				+ "loan int(10) not null"
+				+ "loan int(10) not null,"
 				+ "book1 varchar(20),"
 				+ "book2 varchar(20),"
 				+ "book3 varchar(20),"
