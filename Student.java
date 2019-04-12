@@ -18,6 +18,10 @@ public class Student extends User {
         this.already_borrowed = respond.getInt("already_borrowed");
         this.limited = respond.getBoolean("limited");
         this.loan = respond.getInt("loan");
+        setId(respond.getString("id"));
+        setIdentity(respond.getInt("identity"));
+        setName(respond.getString("name"));
+        setPassword(respond.getString("password"));
         JSONObject book = new JSONObject(respond.getString("books"));
         int bks = respond.getInt("booknumber");
         for (int i = 0; i < bks; i++) {
@@ -37,7 +41,7 @@ public class Student extends User {
     public void cancel() {
         new TcpClient("localhost", 8080).action(new Object() {
             public String act = "cancel";
-            public String usn = getName();
+            public String id = getId();
         });
     }
 
