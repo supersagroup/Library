@@ -1,5 +1,9 @@
 # Library
-library management
-13
+1. book在数据库的储存方式：book对象对应一本书，书名可以相同，书的ID唯一
 
-modified by mky
+2. 取消了number参数，数据库直接读取可借阅数目
+
+3. book构造函数只需要传id，之后自己向服务器发送请求，获取成员数据，构造对象
+
+4. borrow函数中的borrow_time不需要传入参数，服务器端直接写入数据库
+
