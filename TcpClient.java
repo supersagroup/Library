@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-import org.json.*;
+import com.alibaba.fastjson.*;
 
 
 public class TcpClient {
@@ -27,8 +27,8 @@ public class TcpClient {
 
     public JSONObject action(Object o) {
         //转化成json字符串发送
-        JSONObject reqobj = new JSONObject(o);
-        String request = reqobj.toString();
+
+        String request = JSON.toJSONString(o);
         try {
             out.write(request);
             out.flush();
@@ -40,7 +40,7 @@ public class TcpClient {
             BufferedReader bReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             String response = null;
             while ((response = bReader.readLine()) != null) {
-                JSONObject rspobj = new JSONObject(response);
+                JSONObject rspobj = JSON.parseObject(response);
                 return rspobj;
             }
         } catch (IOException e) {
@@ -58,5 +58,7 @@ public class TcpClient {
         }
         return null;
     }
+
+
 
 }
