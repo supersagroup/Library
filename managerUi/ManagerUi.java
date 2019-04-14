@@ -1,6 +1,5 @@
 package managerUi;
 
-import javafx.scene.layout.Background;
 import login.Button;
 import login.NonopaquePanel;
 

@@ -1,13 +1,31 @@
-# Library
-## `login` package
-
-in button `login`, account and password is provided to **TCP to login** if click that button and **TCP need to provide information of User to the `ManagerUi.class` or `StudentUi.class`(名字庞琨力取，不一定是这个)**
-
-`Button.java`(button with background) & `NonopaquePanel.java`(panel that can see the background of a Frame) don't provide any parameter
-
-`Login.run(JFrame, int width, int height)` is used to start father window
-
-`ManagerUi.run(...)` is used to start a child window
 
 
+# `Login.java`
 
+## `login` class
+
+in `login()`, **provide Stu ID and Password to Client**
+
+# `ManagerUi.java`
+
+## `ManagerUi` class
+
+in Button `return`, **Client should run `PayFrame` if the book has fine when returning**
+
+in Button `print log`, need the information of books from **Client**
+
+## `ReturnRemoveFrame` class
+
+in `ReturnRemoveFrame(int)`, if click the button, provide book ID to **Client**
+
+## `BorrowFrame` class
+
+`BorrowFrame()`, if click the button, provide student ID and book ID to **Client**
+
+## `AddFrame` class
+
+`AddFrame()`, if click the button, provide all book information to **Client**
+
+## `PayFineFrame` class
+
+if click the button, provide student ID to **Client**
