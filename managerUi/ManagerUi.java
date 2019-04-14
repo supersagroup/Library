@@ -1,5 +1,6 @@
 package managerUi;
 
+import javafx.scene.layout.Background;
 import login.Button;
 import login.NonopaquePanel;
 
@@ -9,8 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ManagerUi extends JFrame {
+    //Manager manager
     private Image background=new ImageIcon("managerUi.jpg").getImage();
-    public ManagerUi(){
+    public ManagerUi(/*Manager manager*/){
+        //this.manager=manager;
         this.add(new JPanel(){
             protected void paintComponent(Graphics g){
                 g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), this);
@@ -24,7 +27,7 @@ public class ManagerUi extends JFrame {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //借书
+                                        run(new BorrowFrame(), 200, 200);
                                     }
                                 });
                             }
@@ -38,7 +41,8 @@ public class ManagerUi extends JFrame {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //还书
+                                        run(new ReturnRemoveFrame(ReturnRemoveFrame.RETURN), 100 ,150);
+                                        //if the book has fine, run PayFrame in Client
                                     }
                                 });
                             }
@@ -52,7 +56,7 @@ public class ManagerUi extends JFrame {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //添书
+                                        run(new AddFrame(), 100, 300);
                                     }
                                 });
                             }
@@ -66,7 +70,7 @@ public class ManagerUi extends JFrame {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //
+                                        run(new ReturnRemoveFrame(ReturnRemoveFrame.REMOVE), 100 ,150);
                                     }
                                 });
                             }
@@ -80,7 +84,7 @@ public class ManagerUi extends JFrame {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //
+                                        run(new PayFineFrame(), 100, 180);
                                     }
                                 });
                             }
@@ -111,5 +115,185 @@ public class ManagerUi extends JFrame {
     }
     public static void main(String[] args){
         run(new ManagerUi(), 300, 300);
+        //run(new PayFrame(100), 100, 150);
     }
+}
+
+class BackgroundFrame extends JFrame{
+    private Image background=new ImageIcon("managerUi.jpg").getImage();
+    public JPanel backgroundPanel=new JPanel(){
+        protected void paintComponent(Graphics g){
+            g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), this);//set login background
+        }
+    };
+    public BackgroundFrame(){
+        this.add(backgroundPanel);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+}
+
+class ReturnRemoveFrame extends BackgroundFrame{
+    static public final int RETURN=1;
+    static public final int REMOVE=2;
+    private JTextField IDField=new JTextField(8);
+    int pattern;
+    public ReturnRemoveFrame(int p){
+        pattern=p;
+        backgroundPanel.setLayout(new GridLayout(2, 1));
+        backgroundPanel.add(new JLabel("input book ID"));
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(IDField);
+                this.add(new Button("yes"){
+                    {
+                        this.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String ID=IDField.getText();
+                                //System.out.println(ID+" "+pattern);
+                                if(pattern==RETURN)
+                                    ;//communicate with Server in RETURN pattern
+                                if(pattern==REMOVE)
+                                    ;//communicate with Server in REMOVE pattern
+                                ReturnRemoveFrame.this.dispose();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+}
+
+class BorrowFrame extends BackgroundFrame{
+    private JTextField stuIDField=new JTextField(8);
+    private JTextField bookIDField=new JTextField(8);
+    public BorrowFrame(){
+        backgroundPanel.setLayout(new GridLayout(3, 1));
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new JLabel("student ID"));
+                this.add(stuIDField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new JLabel("book ID   "));
+                this.add(bookIDField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new Button("yes"){
+                    {
+                        this.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String stuID=stuIDField.getText();
+                                String bookID=bookIDField.getText();
+                                System.out.println(stuID+" "+bookID);
+                                //Client
+                                BorrowFrame.this.dispose();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+}
+
+class AddFrame extends BackgroundFrame{
+    private JTextField
+            nameField=new JTextField(8),
+            writerField=new JTextField(8),
+            publisherField=new JTextField(8),
+            IDField=new JTextField(8),
+            locationField=new JTextField(8);
+    public AddFrame(){
+        backgroundPanel.setLayout(new GridLayout(6, 1));
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new JLabel("   name   "));
+                this.add(nameField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new JLabel("   writer  "));
+                this.add(writerField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new JLabel("publisher"));
+                this.add(publisherField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new JLabel("     ID    "));
+                this.add(IDField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new JLabel("location "));
+                this.add(locationField);
+            }
+        });
+        backgroundPanel.add(new Button("yes"){
+            {
+                this.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String name=nameField.getText(),
+                                writer=writerField.getText(),
+                                publisher=publisherField.getText(),
+                                ID=IDField.getText(),
+                                location=locationField.getText();
+                        //Client
+                        AddFrame.this.dispose();
+                    }
+                });
+            }
+        });
+    }
+}
+
+class PayFineFrame extends BackgroundFrame{
+    private JTextField stuIDField=new JTextField(10);
+    public PayFineFrame(){
+        backgroundPanel.setLayout(new GridLayout(3, 1));
+        backgroundPanel.add(new JLabel("input student ID"){
+            {
+                this.setHorizontalAlignment(JLabel.LEFT);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(stuIDField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new Button("yes"){
+                    {
+                        this.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String stuID=stuIDField.getText();
+                                //
+                                PayFineFrame.this.dispose();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+}
+
+class PrintFrame extends BackgroundFrame{
+    //
 }
