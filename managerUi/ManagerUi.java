@@ -13,6 +13,7 @@ public class ManagerUi extends JFrame {
     private Image background=new ImageIcon("managerUi.jpg").getImage();
     public ManagerUi(/*Manager manager*/){
         //this.manager=manager;
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.add(new JPanel(){
             protected void paintComponent(Graphics g){
                 g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), this);
@@ -97,7 +98,7 @@ public class ManagerUi extends JFrame {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        //
+                                        run(new PrintFrame(), 100, 200);
                                     }
                                 });
                             }
@@ -241,18 +242,22 @@ class AddFrame extends BackgroundFrame{
                 this.add(locationField);
             }
         });
-        backgroundPanel.add(new Button("yes"){
+        backgroundPanel.add(new NonopaquePanel(){
             {
-                this.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String name=nameField.getText(),
-                                writer=writerField.getText(),
-                                publisher=publisherField.getText(),
-                                ID=IDField.getText(),
-                                location=locationField.getText();
-                        //Client
-                        AddFrame.this.dispose();
+                this.add(new Button("yes"){
+                    {
+                        this.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String name=nameField.getText(),
+                                        writer=writerField.getText(),
+                                        publisher=publisherField.getText(),
+                                        ID=IDField.getText(),
+                                        location=locationField.getText();
+                                //Client
+                                AddFrame.this.dispose();
+                            }
+                        });
                     }
                 });
             }
@@ -261,7 +266,7 @@ class AddFrame extends BackgroundFrame{
 }
 
 class PayFineFrame extends BackgroundFrame{
-    private JTextField stuIDField=new JTextField(10);
+    private JTextField stuIDField=new JTextField(15);
     public PayFineFrame(){
         backgroundPanel.setLayout(new GridLayout(3, 1));
         backgroundPanel.add(new JLabel("input student ID"){
@@ -294,5 +299,33 @@ class PayFineFrame extends BackgroundFrame{
 }
 
 class PrintFrame extends BackgroundFrame{
-    //
+    private JTextField bookField=new JTextField(8);
+    public PrintFrame(){
+        backgroundPanel.setLayout(new GridLayout(3, 1));
+        backgroundPanel.add(new JLabel("input book name"){
+            {
+                this.setHorizontalAlignment(JLabel.LEFT);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(bookField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(new Button("yes"){
+                    {
+                        this.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String bookname=bookField.getText();
+                                //Client
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
 }
