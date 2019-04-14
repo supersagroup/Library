@@ -1,6 +1,7 @@
 package managerUi;
 
-public class PrintUi {
+public class PrintUi extends BackgroundFrame{
+    //Book[] books;
     public PrintUi(/*Book[] books*/){
         //
     }

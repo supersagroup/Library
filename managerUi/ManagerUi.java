@@ -98,7 +98,7 @@ public class ManagerUi extends JFrame {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        run(new PrintFrame(), 100, 200);
+                                        run(new PrintFrame(), 100, 150);
                                     }
                                 });
                             }
@@ -299,7 +299,7 @@ class PayFineFrame extends BackgroundFrame{
 }
 
 class PrintFrame extends BackgroundFrame{
-    private JTextField bookField=new JTextField(8);
+    private JTextField bookField=new JTextField(15);
     public PrintFrame(){
         backgroundPanel.setLayout(new GridLayout(3, 1));
         backgroundPanel.add(new JLabel("input book name"){
