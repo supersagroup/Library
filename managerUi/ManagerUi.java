@@ -2,7 +2,6 @@ package managerUi;
 
 import login.Button;
 import login.NonopaquePanel;
-import login.TcpClient;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,10 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ManagerUi extends JFrame {
-    //Attandent manager;
+    //Manager manager
     private Image background=new ImageIcon("managerUi.jpg").getImage();
-    public ManagerUi(String id){
-        //manager=new Attandent(id);
+    public ManagerUi(/*Manager manager*/){
+        //this.manager=manager;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.add(new JPanel(){
             protected void paintComponent(Graphics g){
@@ -115,7 +114,7 @@ public class ManagerUi extends JFrame {
         jf.setSize(width, height);
     }
     public static void main(String[] args){
-        run(new ManagerUi("111"), 300, 300);
+        run(new ManagerUi(), 300, 300);
         //run(new PayFrame(100), 100, 150);
     }
 }
