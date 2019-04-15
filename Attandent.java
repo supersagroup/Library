@@ -123,5 +123,17 @@ public confirm_request(String id)
 {
 	stu_id=id;
 }
-}}
+}
+
+
+class login_request
+{
+public String act="attandent_login";
+public String id;
+public confirm_request(String id)
+{
+	this.id=id;
+}
+}
+}
 
