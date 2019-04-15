@@ -13,12 +13,13 @@ import com.alibaba.fastjson.JSONObject;
 public class Attandent extends User {
 	
 public Attandent(String name,String id,String password) {
-	super(name,id,password);
+	JSONObject respond=new TcpClient("localhost",8080).action(new login_request(id));
+	super(respond.getString("Name"),id,respond.getString("Password"));
 }
 
 public boolean borrow(String stu_id,String book_id) {
 	JSONObject respond=new TcpClient("localhost",8080).action(new confirm_request(stu_id));
-	if(respond.getBoolean( key:"result")){
+	if(respond.getBoolean( "result")){
 		Book b = new Book(book_id);
 		return b.borrowed(stu_id);
 	}
