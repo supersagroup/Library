@@ -29,21 +29,3 @@ in `ReturnRemoveFrame(int)`, if click the button, provide book ID to **Client**
 ## `PayFineFrame` class
 
 if click the button, provide student ID to **Client**
-
-## `PrintFrame` class
-
-provide book name to **Client**
-
-# `PrintUi.java`
-
-need books from **Client**
-
-# `PayFrame.java`
-
-provide book id to **Client**
-
-# `Student.java`
-
-need student from **Client**
-
-provide book name to **Client** line 149
