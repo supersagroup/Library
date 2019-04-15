@@ -1,20 +1,25 @@
 package managerUi;
 
-import java.util.Date;
-import java.util.ArrayList;
 
+import book.Book;
+import book.BookLocation;
 import login.User;
-import login.Book;
-import login.BookLocation;
+
 import login.TcpClient;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
+
 public class Attandent extends User {
 	
-public Attandent(String name,String id,String password) {
+public Attandent(String id) {
+	super();
 	JSONObject respond=new TcpClient("localhost",8080).action(new login_request(id));
-	super(respond.getString("Name"),id,respond.getString("Password"));
+	this.setId(respond.getString("id"));
+	this.setIdentity(1);
+	this.setName(respond.getString("name"));
+	this.setPassword(respond.getString("password"));
 }
 
 public boolean borrow(String stu_id,String book_id) {
@@ -32,11 +37,12 @@ public boolean pay_fine(String stu_id) {
 }
 			
 public boolean return_book(String book_id){
-	Book b=new Book(book_id);;
-    return b.returned();
+	Book b=new Book(book_id);
+	return true;
+    //return b.returned();
 }
 			
-public boolean add_book(String na,String wr,String pub,String ID,BookLocation loc,int la_ti) {
+public boolean add_book(String na, String wr, String pub, String ID, BookLocation loc, int la_ti) {
 	JSONObject respond = new TcpClient("localhost", 8080).action(new add_request(na,wr,pub,ID,loc,la_ti));
 	return respond.getBoolean("result");
 }
@@ -48,7 +54,7 @@ public boolean remove_book(String book_id) {
 }
 				
 			
-public ArrayList<Book> print_log(String na,String wr,String pub,String ID){
+public ArrayList<Book> print_log(String na, String wr, String pub, String ID){
 	JSONObject respond=new TcpClient("localhost",8080).action(new search_request(na,wr,pub,ID));
 	ArrayList<Book> books=new ArrayList<Book>();
 	int nubmer=respond.getInteger("number");
@@ -130,7 +136,7 @@ class login_request
 {
 public String act="attandent_login";
 public String id;
-public confirm_request(String id)
+public login_request(String id)
 {
 	this.id=id;
 }
