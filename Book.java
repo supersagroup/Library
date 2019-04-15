@@ -49,4 +49,33 @@ public void print()
 {
 	//TODO:输出表单,向服务器发送请求，回传数据库数据，打印
 }
+public String getBookName() {return this.name;}
+
+public String getWriter() {
+	return this.writer;
+}
+
+public String getPublisher() {
+	return this.publisher;
+}
+
+public String getID() {
+	return this.ID;
+}
+
+public String getOwnerID() {
+	return this.ownerID;
+}
+
+public String getBorrowTime() {
+	return this.borrowed;
+}
+
+public int getLastTime() {
+	return this.lastTime;
+}
+
+public BookLocation getLocation() {
+	return this.location;
+}
 }
