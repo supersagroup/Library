@@ -1,5 +1,6 @@
 package studentUi;
 
+import book.Book;
 import login.Button;
 import login.NonopaquePanel;
 import login.Student;
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 
 public class StudentUi extends JFrame {
@@ -62,7 +64,7 @@ public class StudentUi extends JFrame {
         });
     }
     public class ShowInfoFrame extends BackgroundFrame{
-        NonopaquePanel bookPanels[]=new NonopaquePanel[10];
+        NonopaquePanel bookPanels[]=new NonopaquePanel[stu.books.size()];
         public ShowInfoFrame(){
             backgroundPanel.setLayout(new GridLayout(12, 1));
             backgroundPanel.add(new NonopaquePanel(){
@@ -76,26 +78,25 @@ public class StudentUi extends JFrame {
             });
             backgroundPanel.add(new NonopaquePanel(){
                 {
-                    this.setLayout(new GridLayout(1, 6));
+                    this.setLayout(new GridLayout(1, 5));
                     this.add(new LeftLabel("name"));
                     this.add(new LeftLabel("writer"));
                     this.add(new LeftLabel("publisher"));
                     this.add(new LeftLabel("ID"));
                     this.add(new LeftLabel("lasttime"));
-                    this.add(new LeftLabel("fine"));
                 }
             });
-
+            Iterator<Book> itr=stu.books.iterator();
             for(int i=0;i<bookPanels.length;i++){
                 bookPanels[i]=new NonopaquePanel(){
                     {
-                        this.setLayout(new GridLayout(1, 6));
-                        this.add(new LeftLabel("NAME[i]"));
-                        this.add(new LeftLabel("WRITER[i]"));
-                        this.add(new LeftLabel("PUBLISHER[i]"));
-                        this.add(new LeftLabel("ID[i]"));
-                        this.add(new LeftLabel("LASTTIME[i]"));
-                        this.add(new LeftLabel("FINE[i]"));
+                        Book b=itr.next();
+                        this.setLayout(new GridLayout(1, 5));
+                        this.add(new LeftLabel(b.name));
+                        this.add(new LeftLabel(b.writer));
+                        this.add(new LeftLabel(b.publisher));
+                        this.add(new LeftLabel(b.ID));
+                        this.add(new LeftLabel((""+b.lastTime)));
                     }
                 };
                 backgroundPanel.add(bookPanels[i]);
