@@ -219,7 +219,7 @@ public class Database {
 		return false;
 	}
 
-	public boolean Borrow(String userID,String bookID) throws ParseException {
+	public String Borrow(String userID,String bookID) throws ParseException {
 		String sql;
 		String book;
 		String bookName=null;
@@ -237,15 +237,15 @@ public class Database {
 				owner=rs.getString(7);
 			}
 			if(!owner.isEmpty())
-				return false;
+				return JSON.toJSONString(false);
 			if(bookNumber<=0)
-				return false;
+				return JSON.toJSONString(false);
 			sql="SELECT * FROM user WHERE ID='"+userID+"'";
 			rs=stmt.executeQuery(sql);
 			while(rs.next()) {
 				alreadynum=rs.getInt(4);
 				if(alreadynum==10)
-					return false;
+					return JSON.toJSONString(false);
 				for(i=0;i<10;++i)
 				{
 					book = rs.getString(i+6);
@@ -263,7 +263,7 @@ public class Database {
 			if(j>=0) {
 				con.commit();
 			}else {
-				return false;
+				return JSON.toJSONString(false);
 			}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
@@ -279,7 +279,7 @@ public class Database {
 			con.commit();
 
 		}else {
-			return false;
+			return JSON.toJSONString(false);
 		}
 		
 		sql="UPDATE book SET number="+String.valueOf(bookNumber-1)+" WHERE name= '"+bookName+"'";
@@ -288,23 +288,18 @@ public class Database {
 		j=pstmt.executeUpdate();
 		if(j>=0) {
 			con.commit();
-//			con.close();
-//			pstmt.close();
-			return true;//success
-		}else {
-//			con.close();
-//			pstmt.close();
-			return false;//fail
-		}
+			return JSON.toJSONString(true);//success
+		}else 
+			return JSON.toJSONString(false);//fail
 		}catch (SQLException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-		return false;
+		return JSON.toJSONString(false);
 	}
 
 
-	public boolean Return(String bookID) {
+	public String Return(String bookID) {
 		String sql;
 		String ownerID = null;
 		String bookName=null;
@@ -322,7 +317,7 @@ public class Database {
 				bookName=rs.getString(1);
 			}
 			if(ownerID.isEmpty())
-				return false;
+				return JSON.toJSONString(false);
 			sql="SELECT * FROM user WHERE ID= '"+ownerID+"'";
 			rs=stmt.executeQuery(sql);
 			boolean ifFind=false;
@@ -339,16 +334,15 @@ public class Database {
 				}
 			}
 			if(!ifFind)
-				return false;
+				return JSON.toJSONString(false);
 			sql="UPDATE user SET book"+String.valueOf(i+1)+"= '"+"', alreadyborrowednum= "+String.valueOf(borrowNumber-1)+" WHERE ID= '"+ownerID+"'";
 			con.setAutoCommit(false);
 			pstmt=con.prepareStatement(sql);
 			int j=pstmt.executeUpdate();
 			if(j>=0) {
 				con.commit();
-			}else {
-				return false;//fail
-			}
+			}else 
+				return JSON.toJSONString(false);//fail
 			java.util.Date date=new SimpleDateFormat("yyyy-MM-dd").parse("2000-01-01");
 			java.sql.Date sqlDate=new java.sql.Date(date.getTime());
 			sql="UPDATE book SET owner= '"+"' ,borrowtime= '"+sqlDate+"' WHERE ID= '"+bookID+"'";
@@ -357,22 +351,21 @@ public class Database {
 			j=pstmt.executeUpdate();
 			if(j>=0) {
 				con.commit();
-			}else {
-				return false;//fail
-			}
+			}else 
+				return JSON.toJSONString(false);//fail
 			sql="UPDATE book SET number= "+String.valueOf(booknumber+1)+" WHERE name= '"+bookName+"'";
 			con.setAutoCommit(false);
 			pstmt=con.prepareStatement(sql);
 			j=pstmt.executeUpdate();
 			if(j>=0) {
 				con.commit();
-			}else {
-				return false;//fail
-			}
+				return JSON.toJSONString(true);
+			}else 
+				return JSON.toJSONString(false);//fail
 		}catch (SQLException  | ParseException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return JSON.toJSONString(false);
 	}
 
 	public String Login(String id, String pwd) {
@@ -476,12 +469,37 @@ public class Database {
 	}
 	
 	public String DeleteBook(String ID) {
-		String sql="DELETE FROM book WHERE ID='"+ID+"'";
+		String sql;
+		int number=0;
+		String name=null;
 		try {
+			sql="SELECT number,name FROM book WHERE id='"+ID+"'";
+			rs=stmt.executeQuery(sql);
+			if(rs.next()) {
+				number=rs.getInt(1);
+				name=rs.getString(2);
+			}
+			else
+				return JSON.toJSONString(false);
+			sql="DELETE FROM book WHERE ID='"+ID+"'";
 			pstmt=con.prepareStatement(sql);
 			int i=pstmt.executeUpdate();
-			if(i>0) 
-				return JSON.toJSONString(true);
+			if(i>0) {
+				if(number>1) {
+					sql="UPDATE book SET number="+String.valueOf(number-1)+" WHERE name='"+name+"'";
+					con.setAutoCommit(false);
+					pstmt=con.prepareStatement(sql);
+					int j=pstmt.executeUpdate();
+					if(j>0) {
+						con.commit();
+						return JSON.toJSONString(true);
+					}
+					else 
+						return JSON.toJSONString(false);
+				}
+				else
+					return JSON.toJSONString(true);
+			}
 			else 
 				return JSON.toJSONString(false);
 		}catch (SQLException e) {
@@ -539,6 +557,24 @@ public class Database {
 		}
 		return JSON.toJSONString(false);
 		
+	}
+	
+	public String CheckAdmin(String id) {
+		String sql="SELECT * FROM admin WHERE ID='"+id+"'";
+		try {
+			rs=stmt.executeQuery(sql);
+			if(rs.next()) {
+				String name=rs.getString(1);
+				String pwd=rs.getString(3);
+				
+				GetAttanResponse getAttanRes=new GetAttanResponse(name,pwd);
+				return JSON.toJSONString(getAttanRes);
+			}
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void add() {
