@@ -611,11 +611,12 @@ public class Database {
 //		db.CheckBookNumber("人间失格");
 //		db.UpdateNumber("人间失格", 3);
 //		db.CheckBook("66666");
-		db.Borrow("coolestdxy", "66667");
+//		db.Borrow("coolestdxy", "66667");
 //		db.Borrow("yzy", "55557");
 //		db.Login("dxy", "123456");
 //		db.Return("66666");
 //		db.Return("55555");
+		db.DeleteBook("55558");
 	}
 
 }

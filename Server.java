@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+
 import com.alibaba.fastjson.*;
 
 /**
@@ -77,22 +79,28 @@ public class Server {
                 String x=null;
                 switch (req.getString("act")) {
                     case "loginrequest"://
-                           x=db.Login(req.getString("id"), req.getString("pwd"));
+                    	x=db.Login(req.getString("id"), req.getString("pwd"));
                         break;
-                    case "2"://
-
+                    case "getstuinfo"://
+                    	x=db.CheckUser(req.getString("id"));
                         break;
-                    case "3"://
-
+                    case "getbookinfo"://
+                    	x=db.CheckBook(req.getString("bookid"));
                         break;
-                    case "4"://
-
+                    case "borrowbook"://
+                    	x=db.Borrow(req.getString("bookID"), req.getString("ownerID"));
                         break;
-                    case "5"://
-
+                    case "returnbook"://
+                    	x=db.Return(req.getString("bookID"));
                         break;
-                    case "6"://
-
+                    case "getattaninfo"://
+                    	x=db.CheckAdmin(req.getString("id"));
+                        break;
+                    case "confirmborrow"://
+                    	x=db.Borrow(req.getString("bookID"), req.getString("ownerID"));
+                        break;
+                    case "addbook"://
+                    	x=db.AddBook(req.getString("name"), req.getString("writer"), req.getString("publisher"), req.getString("book_id"),  req.getString("location"),req.getIntValue("last_ti"));
                         break;
                     default:
                         break;
@@ -116,7 +124,10 @@ public class Server {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
+            } catch (ParseException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} finally {
                 try {
                     socket.close();
                 } catch (IOException e) {
