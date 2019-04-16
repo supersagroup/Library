@@ -2,6 +2,7 @@ package studentUi;
 
 import login.Button;
 import login.NonopaquePanel;
+import login.Student;
 import managerUi.ManagerUi;
 
 import javax.swing.*;
@@ -9,10 +10,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class StudentUi extends JFrame {
-    //Student stu;
+    Student stu;
     private Image background=new ImageIcon("managerUi.jpg").getImage();
-    public StudentUi(/*Student s*/){
+    public StudentUi(String id){
+        stu=new Student(id);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.add(new JPanel(){
             protected void paintComponent(Graphics g){
@@ -23,8 +26,8 @@ public class StudentUi extends JFrame {
                 this.add(new NonopaquePanel(){
                     {
                         this.setLayout(new GridLayout(1, 2));
-                        this.add(new LeftLabel("name: XXX"));
-                        this.add(new LeftLabel("ID: 123456"));
+                        this.add(new LeftLabel("name: "+stu.getName()));
+                        this.add(new LeftLabel("ID: "+stu.getId()));
                     }
                 });
                 this.add(new NonopaquePanel(){
@@ -65,9 +68,9 @@ public class StudentUi extends JFrame {
             backgroundPanel.add(new NonopaquePanel(){
                 {
                     this.setLayout(new GridLayout(1, 4));
-                    this.add(new LeftLabel("name: XXX"));
-                    this.add(new LeftLabel("ID: 1324568"));
-                    this.add(new LeftLabel("number: X"));
+                    this.add(new LeftLabel("name: "+stu.getName()));
+                    this.add(new LeftLabel("ID: "+stu.getId()));
+                    this.add(new LeftLabel("number: "));
                     this.add(new LeftLabel("fine: X"));
                 }
             });
@@ -100,7 +103,7 @@ public class StudentUi extends JFrame {
         }
     }
     public static void main(String[] args){
-        ManagerUi.run(new StudentUi(), 100, 200);
+        ManagerUi.run(new StudentUi("111"), 100, 200);
     }
 }
 

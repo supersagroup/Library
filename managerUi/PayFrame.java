@@ -9,7 +9,9 @@ import java.awt.*;
 //run if there is fine when returning a book in Client
 
 public class PayFrame extends BackgroundFrame{
-    public PayFrame(double fine){
+    String bookID;
+    public PayFrame(double fine, String id){
+        bookID=id;
         backgroundPanel.setLayout(new GridLayout(2, 1));
         backgroundPanel.add(new JLabel("please pay "+fine){
             {
@@ -20,7 +22,7 @@ public class PayFrame extends BackgroundFrame{
             {
                 this.add(new Button("paid!"){
                     {
-                        //communicate with Server
+                        //communicate with Server(bookID)
                         PayFrame.this.dispose();
                     }
                 });

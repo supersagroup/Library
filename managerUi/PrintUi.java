@@ -1,6 +1,7 @@
 package managerUi;
 
-import login.Book;
+
+import book.Book;
 import login.NonopaquePanel;
 
 import javax.swing.*;

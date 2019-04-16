@@ -1,28 +1,19 @@
 package login;
 
+import com.alibaba.fastjson.JSONObject;
+import managerUi.ManagerUi;
+import studentUi.StudentUi;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-/*
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.SocketException;*/
 
 public class Login extends JFrame {
     //GUI
     private Image loginImage=new ImageIcon("login.jpg").getImage();//login background
     private JTextField accountField=new JTextField(15);
     private JTextField passwordField=new JTextField(15);
-    /*socket
-    private Socket socket;
-    private String serverAddr="localhost";
-    private int serverPort=10086;
-    private PrintWriter pw;
-    */
     public Login(){
         this.add(new JPanel(){
             protected void paintComponent(Graphics g){
@@ -77,7 +68,27 @@ public class Login extends JFrame {
                                             public void actionPerformed(ActionEvent e) {
                                                 String account=accountField.getText();
                                                 String password=passwordField.getText();
-                                                System.out.println(account+" "+password);
+                                                //
+                                                JSONObject response=new TcpClient("192.168.43.90",8080).action(new LoginRequest(account,password));
+                                                int confirm=response.getInteger("confirm");
+                                                if(confirm==0)
+                                                    run(new JFrame(){
+                                                        {
+                                                            this.add(new JLabel("login failure!"){
+                                                                {
+                                                                    this.setHorizontalAlignment(JLabel.CENTER);
+                                                                    this.setVerticalAlignment(JLabel.CENTER);
+                                                                }
+                                                            });
+                                                        }
+                                                    }, 100, 100);
+                                                else{
+                                                    int identity=response.getInteger("identity");
+                                                    if(identity==0)
+                                                        ManagerUi.run(new StudentUi(account), 100, 200);
+                                                    else if (identity==1)
+                                                        ManagerUi.run(new ManagerUi(account), 300, 300);
+                                                }
                                             }
                                         });
                                     }
@@ -88,17 +99,7 @@ public class Login extends JFrame {
                 });
             }
         });
-    }/*
-    public class Button extends JButton{
-        private Image buttonImage=new ImageIcon("button.png").getImage();
-        protected void paintComponent(Graphics g){
-            g.drawImage(buttonImage, 0, 0, this.getWidth(), this.getHeight(), this);
-            g.drawString(this.getText(), this.getWidth()/2, this.getHeight()/2);
-        }
-        public Button(String s){
-            super(s);
-        }
-    }*/
+    }
     public static void run(JFrame jf, int width, int height){
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
