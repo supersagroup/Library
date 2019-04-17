@@ -8,8 +8,10 @@ public class InitBookResponse {
 	private String borrowedTime;
 	private String ID;
 	private String location;
+	private int lasttime;
+	boolean result;
 	
-	public InitBookResponse(String name,String writer,String publisher,String ownerID,String borrowedTime,String ID,String location) {
+	public InitBookResponse(String name,String writer,String publisher,String ownerID,String borrowedTime,String ID,String location,int laattime,boolean x) {
 		setName(name);
 		setWriter(writer);
 		setPublisher(publisher);
@@ -17,6 +19,8 @@ public class InitBookResponse {
 		setBorrowedTime(borrowedTime);
 		setID(ID);
 		setLocation(location);
+		setLasttime(laattime);
+		this.setResult(x);
 	}
 	
 	public String getName() {
@@ -61,6 +65,23 @@ public class InitBookResponse {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+
+	public int getLasttime() {
+		return lasttime;
+	}
+
+	public void setLasttime(int lasttime) {
+		this.lasttime = lasttime;
+	}
+
+	public boolean isResult() {
+		return result;
+	}
+
+	public void setResult(boolean result) {
+		this.result = result;
+	}
+	
 	
 	
 }

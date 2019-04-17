@@ -88,7 +88,7 @@ public class Server {
                     	x=db.CheckBook(req.getString("bookid"));
                         break;
                     case "borrowbook"://
-                    	x=db.Borrow(req.getString("bookID"), req.getString("ownerID"));
+                    	x=db.Borrow(req.getString("ownerID"), req.getString("bookID"));
                         break;
                     case "returnbook"://
                     	x=db.Return(req.getString("bookID"));
@@ -97,10 +97,10 @@ public class Server {
                     	x=db.CheckAdmin(req.getString("id"));
                         break;
                     case "confirmborrow"://
-                    	x=db.Borrow(req.getString("bookID"), req.getString("ownerID"));
+                    	x=db.ConfirmBorrow(req.getString("stu_id"));
                         break;
-                    case "addbook"://
-                    	x=db.AddBook(req.getString("name"), req.getString("writer"), req.getString("publisher"), req.getString("book_id"),  req.getString("location"),req.getIntValue("last_ti"));
+                    case "add"://
+                    	x=db.AddBook(req.getString("name"), req.getString("writer"), req.getString("publisher"), req.getString("book_id"),  req.getString("location"),req.getIntValue("last_time"));
                         break;
                     case "attandent_search"://
                     	x=db.SearchBook(req.getString("name"), req.getString("writer"), req.getString("publisher"));
@@ -117,8 +117,7 @@ public class Server {
 
                 socket.shutdownInput();
 
-                System.out.println("server begin write");
-
+                System.out.println("server begin write"+x);
                 PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(out));
                 pWriter.write(x);
                 pWriter.flush();

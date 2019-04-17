@@ -57,3 +57,4 @@ public class InitStuResponse {
 		this.books = books;
 	}
 }
+

@@ -236,16 +236,16 @@ public class Database {
 				bookNumber=rs.getInt(5);
 				owner=rs.getString(7);
 			}
-			if(!owner.isEmpty())
-				return JSON.toJSONString(false);
+			if(!owner.equals(""))
+				return JSON.toJSONString(new ConfirmResponse(false));
 			if(bookNumber<=0)
-				return JSON.toJSONString(false);
+				return JSON.toJSONString(new ConfirmResponse(false));
 			sql="SELECT * FROM user WHERE ID='"+userID+"'";
 			rs=stmt.executeQuery(sql);
 			while(rs.next()) {
 				alreadynum=rs.getInt(4);
 				if(alreadynum==10)
-					return JSON.toJSONString(false);
+					return JSON.toJSONString(new ConfirmResponse(false));
 				for(i=0;i<10;++i)
 				{
 					book = rs.getString(i+6);
@@ -263,7 +263,7 @@ public class Database {
 			if(j>=0) {
 				con.commit();
 			}else {
-				return JSON.toJSONString(false);
+				return JSON.toJSONString(new ConfirmResponse(false));
 			}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
@@ -279,7 +279,7 @@ public class Database {
 			con.commit();
 
 		}else {
-			return JSON.toJSONString(false);
+			return JSON.toJSONString(new ConfirmResponse(false));
 		}
 		
 		sql="UPDATE book SET number="+String.valueOf(bookNumber-1)+" WHERE name= '"+bookName+"'";
@@ -288,9 +288,9 @@ public class Database {
 		j=pstmt.executeUpdate();
 		if(j>=0) {
 			con.commit();
-			return JSON.toJSONString(true);//success
+			return JSON.toJSONString(new ConfirmResponse(true));//success
 		}else 
-			return JSON.toJSONString(false);//fail
+			return JSON.toJSONString(new ConfirmResponse(false));//fail
 		}catch (SQLException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
@@ -316,8 +316,8 @@ public class Database {
 				booknumber=rs.getInt(5);
 				bookName=rs.getString(1);
 			}
-			if(ownerID.isEmpty())
-				return JSON.toJSONString(false);
+			if(ownerID.equals(""))
+				return JSON.toJSONString(new ConfirmResponse(false));
 			sql="SELECT * FROM user WHERE ID= '"+ownerID+"'";
 			rs=stmt.executeQuery(sql);
 			boolean ifFind=false;
@@ -334,7 +334,7 @@ public class Database {
 				}
 			}
 			if(!ifFind)
-				return JSON.toJSONString(false);
+				return JSON.toJSONString(new ConfirmResponse(false));
 			sql="UPDATE user SET book"+String.valueOf(i+1)+"= '"+"', alreadyborrowednum= "+String.valueOf(borrowNumber-1)+" WHERE ID= '"+ownerID+"'";
 			con.setAutoCommit(false);
 			pstmt=con.prepareStatement(sql);
@@ -342,7 +342,7 @@ public class Database {
 			if(j>=0) {
 				con.commit();
 			}else 
-				return JSON.toJSONString(false);//fail
+				return JSON.toJSONString(new ConfirmResponse(false));//fail
 			java.util.Date date=new SimpleDateFormat("yyyy-MM-dd").parse("2000-01-01");
 			java.sql.Date sqlDate=new java.sql.Date(date.getTime());
 			sql="UPDATE book SET owner= '"+"' ,borrowtime= '"+sqlDate+"' WHERE ID= '"+bookID+"'";
@@ -352,20 +352,20 @@ public class Database {
 			if(j>=0) {
 				con.commit();
 			}else 
-				return JSON.toJSONString(false);//fail
+				return JSON.toJSONString(new ConfirmResponse(false));//fail
 			sql="UPDATE book SET number= "+String.valueOf(booknumber+1)+" WHERE name= '"+bookName+"'";
 			con.setAutoCommit(false);
 			pstmt=con.prepareStatement(sql);
 			j=pstmt.executeUpdate();
 			if(j>=0) {
 				con.commit();
-				return JSON.toJSONString(true);
+				return JSON.toJSONString(new ConfirmResponse(true));
 			}else 
-				return JSON.toJSONString(false);//fail
+				return JSON.toJSONString(new ConfirmResponse(false));//fail
 		}catch (SQLException  | ParseException e) {
 			e.printStackTrace();
 		}
-		return JSON.toJSONString(false);
+		return JSON.toJSONString(new ConfirmResponse(false));
 	}
 
 	public String Login(String id, String pwd) {
@@ -457,15 +457,16 @@ public class Database {
 				String owner=rs.getString(7);
 				java.sql.Date dt=rs.getDate(8);
 				String borrowtime=dt.toString();
+				int lasttime=rs.getInt(9);
 				
-				InitBookResponse initBookRes=new InitBookResponse(name,writer,publisher,owner,borrowtime,ID,location);
+				InitBookResponse initBookRes=new InitBookResponse(name,writer,publisher,owner,borrowtime,ID,location,lasttime,true);
 				return JSON.toJSONString(initBookRes);
 			}
 		} catch (SQLException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-		return null;
+		return JSON.toJSONString(new ConfirmResponse(false));
 	}
 	
 	public String DeleteBook(String ID) {
@@ -492,21 +493,21 @@ public class Database {
 					int j=pstmt.executeUpdate();
 					if(j>0) {
 						con.commit();
-						return JSON.toJSONString(true);
+						return JSON.toJSONString(new ConfirmResponse(false));
 					}
 					else 
-						return JSON.toJSONString(false);
+						return JSON.toJSONString(new ConfirmResponse(false));
 				}
 				else
-					return JSON.toJSONString(true);
+					return JSON.toJSONString(new ConfirmResponse(true));
 			}
 			else 
-				return JSON.toJSONString(false);
+				return JSON.toJSONString(new ConfirmResponse(false));
 		}catch (SQLException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-		return JSON.toJSONString(false);
+		return JSON.toJSONString(new ConfirmResponse(false));
 	}
 
 	public String AddBook(String name,String writer,String publisher,String ID,String location,int lasttime) {
@@ -542,20 +543,20 @@ public class Database {
 				if(i>0) {
 					con.commit();
 					System.out.println("插入成功！");
-					return JSON.toJSONString(true);
+					return JSON.toJSONString(new ConfirmResponse(true));
 				}
 				else 
-					return JSON.toJSONString(false);
+					return JSON.toJSONString(new ConfirmResponse(false));
 			}
 			else {
 				System.out.println("图书"+ID+"插入失败！");
-				return JSON.toJSONString(false);
+				return JSON.toJSONString(new ConfirmResponse(false));
 			}
 		} catch (SQLException | ParseException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-		return JSON.toJSONString(false);
+		return JSON.toJSONString(new ConfirmResponse(false));
 		
 	}
 	
@@ -623,23 +624,45 @@ public class Database {
 		return null;
 	}
 	
+	public String ConfirmBorrow(String id){
+		String sql="SELECT alreadyborrowednum FROM user WHERE ID='"+id+"'";
+		ConfirmResponse b=new ConfirmResponse(false);
+		try {
+			rs=stmt.executeQuery(sql);
+		if(rs.next()) {
+			int alreadynum=rs.getInt(1);
+			if(alreadynum<=9)
+			{
+				b.setResult(true);
+				return JSON.toJSONString(b);
+			}
+			else
+				return JSON.toJSONString(b);
+		}else
+			return JSON.toJSONString(b);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return JSON.toJSONString(b);
+	}
+	
 	public String payFine(String userID) {
 		String sql="UPDATE user SET loan = 0 WHERE ID = '"+userID+"'";
 		try {
 		con.setAutoCommit(false);
 		pstmt=con.prepareStatement(sql);
 		int j=pstmt.executeUpdate();
-		if(j>=0) {
+		if(j>0) {
 			con.commit();
-			return JSON.toJSONString(true);
+			return JSON.toJSONString(new ConfirmResponse(true));
 		}else {
-			return JSON.toJSONString(false);
+			return JSON.toJSONString(new ConfirmResponse(false));
 		}
 		}catch (SQLException e) {
 		// TODO 自动生成的 catch 块
 		e.printStackTrace();
 		}
-		return JSON.toJSONString(false);
+		return JSON.toJSONString(new ConfirmResponse(false));
 		}
 	
 	public void add() {
@@ -681,7 +704,8 @@ public class Database {
 //		db.Login("dxy", "123456");
 //		db.Return("66666");
 //		db.Return("55555");
-		db.DeleteBook("55558");
+//		db.DeleteBook("55558");
+		db.AddBook("人间失格", "太宰治","不详", "123456","1-2-3-4",9);
 	}
 
 }
