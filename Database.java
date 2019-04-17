@@ -577,6 +577,71 @@ public class Database {
 		return null;
 	}
 	
+	public String SearchBook(String name,String writer,String publisher)
+	{
+		boolean and=false;
+		String sql="SELECT * FROM book WHERE ";
+		if(!name.isEmpty())
+		{
+			sql=sql+"name= '"+name+"'";
+			and =true;
+		}
+		if(!writer.isEmpty())
+		{
+			if(and)
+				sql=sql+" AND writer= '"+writer+"'";
+			else
+			{
+				sql=sql+"writer= '"+writer+"'";
+				and =true;
+			}
+		}
+		if(!publisher.isEmpty())
+		{
+			if(and)
+				sql=sql+" AND publisher= '"+publisher+"'";
+			else
+			{
+				sql=sql+"publisher= '"+publisher+"'";
+				and=true;
+			}
+		}
+
+		numbers Numbers=new numbers();
+		try {
+			rs=stmt.executeQuery(sql);
+			while(rs.next()) {
+				String id=rs.getString(4);
+				if(!id.isEmpty())
+					Numbers.Add(id);
+			}
+				return JSON.toJSONString(Numbers);
+		}catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String payFine(String userID) {
+		String sql="UPDATE user SET loan = 0 WHERE ID = '"+userID+"'";
+		try {
+		con.setAutoCommit(false);
+		pstmt=con.prepareStatement(sql);
+		int j=pstmt.executeUpdate();
+		if(j>=0) {
+			con.commit();
+			return JSON.toJSONString(true);
+		}else {
+			return JSON.toJSONString(false);
+		}
+		}catch (SQLException e) {
+		// TODO 自动生成的 catch 块
+		e.printStackTrace();
+		}
+		return JSON.toJSONString(false);
+		}
+	
 	public void add() {
 		this.AddUser("杜昕昱", "coolestdxy", "yzy", 0, 0, "", "", "", "", "", "", "", "", "", "");
 		this.AddUser("杨振宇", "yzy", "yzy", 0, 0, "", "", "", "", "", "", "", "", "", "");

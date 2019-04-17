@@ -102,6 +102,15 @@ public class Server {
                     case "addbook"://
                     	x=db.AddBook(req.getString("name"), req.getString("writer"), req.getString("publisher"), req.getString("book_id"),  req.getString("location"),req.getIntValue("last_ti"));
                         break;
+                    case "attandent_search"://
+                    	x=db.SearchBook(req.getString("name"), req.getString("writer"), req.getString("publisher"));
+                        break;
+                    case "remove"://
+                    	x=db.DeleteBook(req.getString("book_id"));
+                        break;
+                    case "pay_fine"://
+                    	x=db.payFine(req.getString("stu_id"));
+                        break;
                     default:
                         break;
                 }
