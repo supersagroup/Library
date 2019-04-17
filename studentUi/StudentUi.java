@@ -5,11 +5,13 @@ import login.Button;
 import login.NonopaquePanel;
 import login.Student;
 import managerUi.ManagerUi;
+import managerUi.PrintUi;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 
@@ -53,7 +55,7 @@ public class StudentUi extends JFrame {
                                 this.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        ManagerUi.run(new PrintFrame(), 100, 150);
+                                        ManagerUi.run(new PrintFrame(stu), 100, 300);
                                     }
                                 });
                             }
@@ -129,8 +131,12 @@ class LeftLabel extends JLabel{
 }
 
 class PrintFrame extends BackgroundFrame {
-    private JTextField bookField=new JTextField(15);
-    public PrintFrame(){
+    Student stu;
+    private JTextField bookField=new JTextField(15),
+            writerField=new JTextField(15),
+            pubField=new JTextField(15);
+    public PrintFrame(Student s){
+        stu=s;
         backgroundPanel.setLayout(new GridLayout(3, 1));
         backgroundPanel.add(new JLabel("input book name"){
             {
@@ -144,13 +150,24 @@ class PrintFrame extends BackgroundFrame {
         });
         backgroundPanel.add(new NonopaquePanel(){
             {
+                this.add(writerField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
+                this.add(pubField);
+            }
+        });
+        backgroundPanel.add(new NonopaquePanel(){
+            {
                 this.add(new Button("yes"){
                     {
                         this.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                String bookname=bookField.getText();
-                                //Client
+                                String bookname=bookField.getText(),wr=writerField.getText(),pub=pubField.getText();
+                                ArrayList<Book> arr=stu.search(bookname, wr, pub);
+                                ManagerUi.run(new PrintUi(arr), 500, 100 + 100 * arr.size());
                             }
                         });
                     }
