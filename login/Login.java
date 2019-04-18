@@ -11,9 +11,9 @@ import java.awt.event.ActionListener;
 
 public class Login extends JFrame {
     //GUI
-    private Image loginImage=new ImageIcon("login.jpg").getImage();//login background
+    private Image loginImage=new ImageIcon("Background3.jpg").getImage();//login background
     private JTextField accountField=new JTextField(15);
-    private JTextField passwordField=new JTextField(15);
+    private JPasswordField passwordField=new JPasswordField(15);
     public Login(){
         this.add(new JPanel(){
             protected void paintComponent(Graphics g){

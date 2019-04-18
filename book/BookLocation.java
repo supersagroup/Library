@@ -10,4 +10,7 @@ public BookLocation(String s,String r,String n,String b) {
 	name=n;
 	bookshelf=b;
 }
+public String toString(){
+	return story+"-"+roomNumber+"-"+name+"-"+bookshelf;
+}
 }

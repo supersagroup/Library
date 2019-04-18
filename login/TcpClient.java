@@ -12,7 +12,7 @@ public class TcpClient {
     PrintWriter out;
 
     public TcpClient(String serverAddr, int serverPort) {
-        this.serverAddr = "10.203.186.124";
+        this.serverAddr = "192.168.43.90";
         this.serverPort = serverPort;
         //初始化socket
         try {

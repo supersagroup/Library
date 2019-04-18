@@ -56,10 +56,10 @@ public boolean remove_book(String book_id) {
 public ArrayList<Book> print_log(String na, String wr, String pub, String ID)throws Exception{
 	JSONObject respond=new TcpClient("localhost",8080).action(new search_request(na,wr,pub,ID));
 	ArrayList<Book> books=new ArrayList<Book>();
-	int nubmer=respond.getInteger("number");
-	for(int i=0;i<nubmer;i++)
+	for(int i=1;i<=10;i++)
 	{
-		books.add(new Book(respond.getString("number"+i)));
+		if(!respond.getString("book"+i).equals(""))
+			books.add(new Book(respond.getString("book"+i)));
 	}
 	return books;
 }

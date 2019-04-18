@@ -3,6 +3,7 @@ import book.Book;
 import com.alibaba.fastjson.*;
 import login.TcpClient;
 import login.User;
+import managerUi.Attandent;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class Student extends User {
 
     public Student(String ID){
         super();
+        books=new ArrayList<>();
         JSONObject respond = new TcpClient("localhost", 8080).action(new InitStuInfo(ID));
         this.already_borrowed = respond.getIntValue("already_borrowed");
         this.limited = respond.getBoolean("limited");
@@ -23,11 +25,10 @@ public class Student extends User {
         setIdentity(0);
         setName(respond.getString("name"));
         setPassword(respond.getString("password"));
-        JSONObject book = JSON.parseObject(respond.getString("books"));
-        int bks = respond.getIntValue("booknumber");
         try{
-            for (int i = 0; i < bks; i++) {
-                this.books.add(new Book(book.getString(String.valueOf(i))));
+            for (int i = 1; i <= 10; i++) {
+                if(!respond.getString("book"+i).equals(""))
+                    this.books.add(new Book(respond.getString("book"+i)));
             }
         }catch (Exception e){
             //
@@ -41,25 +42,15 @@ public class Student extends User {
     public void print_books() {
         //结合界面
     }
-    public ArrayList<Book> search(String na, String wr, String pub) {
+    public ArrayList<Book> search(String na, String wr, String pub) throws Exception {
 
-        JSONObject respond = new TcpClient("localhost", 8080).action(new search_request(na, wr, pub));
-
-        ArrayList<Book> books = new ArrayList<Book>();
-
-        String book = respond.getString("book");
-
-        JSONObject bk = JSON.parseObject(book);
-        try{
-            for (int i = 0; i < 10; i++) {
-
-                if (bk.getString("id" + i).equals(""))
-                    break;
-                else {
-                    books.add(new Book(bk.getString("id" + i)));
-                }
-            }
-        }catch (Exception e){;}
+        JSONObject respond=new TcpClient("localhost",8080).action(new search_request(na,wr,pub));
+        ArrayList<Book> books=new ArrayList<Book>();
+        for(int i=1;i<=10;i++)
+        {
+            if(!respond.getString("book"+i).equals(""))
+                books.add(new Book(respond.getString("book"+i)));
+        }
         return books;
     }
     @Override

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class ManagerUi extends JFrame {
     Attandent manager;
-    private Image background = new ImageIcon("managerUi.jpg").getImage();
+    private Image background = new ImageIcon("Background3.jpg").getImage();
 
     public ManagerUi(String id) {
         manager = new Attandent(id);
@@ -128,7 +128,7 @@ public class ManagerUi extends JFrame {
 }
 
 class BackgroundFrame extends JFrame {
-    private Image background = new ImageIcon("managerUi.jpg").getImage();
+    private Image background = new ImageIcon("Background3.jpg").getImage();
     public JPanel backgroundPanel = new JPanel() {
         protected void paintComponent(Graphics g) {
             g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), this);//set login background
@@ -403,26 +403,37 @@ class PayFineFrame extends BackgroundFrame {
 class PrintFrame extends BackgroundFrame {
     private JTextField bookField = new JTextField(15),
             writerField = new JTextField(15),
-            publisherField = new JTextField(15),
-            IDField = new JTextField(15);
+            publisherField = new JTextField(15);
     Attandent manager;
 
     public PrintFrame(Attandent m) {
         manager = m;
         backgroundPanel.setLayout(new GridLayout(7, 1));
-        backgroundPanel.add(new JLabel("input book name"));
+        backgroundPanel.add(new JLabel("input book name"){
+            {
+                this.setVerticalAlignment(JLabel.CENTER);
+            }
+        });
         backgroundPanel.add(new NonopaquePanel() {
             {
                 this.add(bookField);
             }
         });
-        backgroundPanel.add(new JLabel("input writer"));
+        backgroundPanel.add(new JLabel("input writer"){
+            {
+                this.setVerticalAlignment(JLabel.CENTER);
+            }
+        });
         backgroundPanel.add(new NonopaquePanel() {
             {
                 this.add(writerField);
             }
         });
-        backgroundPanel.add(new JLabel("input publisher"));
+        backgroundPanel.add(new JLabel("input publisher"){
+            {
+                this.setVerticalAlignment(JLabel.CENTER);
+            }
+        });
         backgroundPanel.add(new NonopaquePanel() {
             {
                 this.add(publisherField);
@@ -436,9 +447,9 @@ class PrintFrame extends BackgroundFrame {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 String bookname = bookField.getText(), writer = writerField.getText(),
-                                        publisher = publisherField.getText(), ID = IDField.getText();
+                                        publisher = publisherField.getText();
                                 try {
-                                    ArrayList<Book> books = manager.print_log(bookname, writer, publisher, ID);
+                                    ArrayList<Book> books = manager.print_log(bookname, writer, publisher, "");
                                     ManagerUi.run(new PrintUi(books), 500, 100 + 100 * books.size());
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
