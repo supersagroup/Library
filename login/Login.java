@@ -28,7 +28,7 @@ public class Login extends JFrame {
                         this.add(new NonopaquePanel());
                         this.add(new NonopaquePanel(){
                             {
-                                this.add(new JLabel("图书管理系统"));
+                                this.add(new JLabel("鍥句功绠＄悊绯荤粺"));
                             }
                         });
                     }
@@ -72,7 +72,7 @@ public class Login extends JFrame {
                                                 JSONObject response=new TcpClient("192.168.43.90",8080).action(new LoginRequest(account,password));
                                                 int confirm=response.getInteger("confirm");
                                                 if(confirm==0)
-                                                    run(new JFrame(){
+                                                    ManagerUi.run(new JFrame(){
                                                         {
                                                             this.add(new JLabel("login failure!"){
                                                                 {
@@ -84,10 +84,14 @@ public class Login extends JFrame {
                                                     }, 100, 100);
                                                 else{
                                                     int identity=response.getInteger("identity");
-                                                    if(identity==0)
+                                                    if(identity==0){
                                                         ManagerUi.run(new StudentUi(account), 100, 200);
-                                                    else if (identity==1)
+                                                        Login.this.dispose();
+                                                    }
+                                                    else if (identity==1){
                                                         ManagerUi.run(new ManagerUi(account), 300, 300);
+                                                        Login.this.dispose();
+                                                    }
                                                 }
                                             }
                                         });

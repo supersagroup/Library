@@ -74,8 +74,8 @@ public class StudentUi extends JFrame {
                     this.setLayout(new GridLayout(1, 4));
                     this.add(new LeftLabel("name: "+stu.getName()));
                     this.add(new LeftLabel("ID: "+stu.getId()));
-                    this.add(new LeftLabel("number: "));
-                    this.add(new LeftLabel("fine: X"));
+                    this.add(new LeftLabel("number: "+stu.already_borrowed));
+                    this.add(new LeftLabel("fine: "+stu.loan));
                 }
             });
             backgroundPanel.add(new NonopaquePanel(){
